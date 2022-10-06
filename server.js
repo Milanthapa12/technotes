@@ -18,7 +18,7 @@ connectDB();
 // logger
 app.use(logger);
 // middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 // static page
@@ -26,6 +26,8 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 //routes
 app.use("/", require("./routes/root"));
+app.use("/users", require("./routes/userRoutes"));
+app.use("/notes", require("./routes/notesRoute"));
 
 app.use("*", (req, res) => {
   if (req.accepts("html")) {
