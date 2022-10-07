@@ -9,6 +9,10 @@ function Welcome() {
   return (
     <div>
       <Link to="/dash">Welcome</Link> TODAY: {today}
+      <br />
+      <Link to="/dash/users">Users</Link>
+      <br />
+      <Link to="/dash/notes">Notes</Link>
     </div>
   );
 }
