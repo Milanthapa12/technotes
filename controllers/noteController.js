@@ -12,7 +12,6 @@ const getAllNotes = async (req, res) => {
 // create
 const createNote = async (req, res) => {
   const { user, title, description } = req.body;
-  console.log(user, "fuck");
   const notesObj = {
     user,
     title,

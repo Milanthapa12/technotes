@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { useAddNewNoteMutation } from "./noteApiSlice";
 import { InputForm, TextAreaForm, SelectOption } from "../FormHelpers";
+import { Button, Card, Col, Form } from "react-bootstrap";
 
 function NewNoteForm({ users }) {
   const navigate = useNavigate();
@@ -14,8 +15,10 @@ function NewNoteForm({ users }) {
     title: "",
     description: "",
   });
-  const inputChangeHandler = (event) =>
+  const inputChangeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+    console.log(event.target.name, event.target.value);
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -26,45 +29,42 @@ function NewNoteForm({ users }) {
   };
 
   return (
-    <>
+    <Col className="vh-100 my-5" md={{ span: 6, offset: 3 }}>
       {isError ? <p>{error.data.message}</p> : null}
       {!isLoading ? (
-        <form onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <label htmlFor="title">title</label>
+        <Card className="px-3 py-4 rounded-0 shadow">
+          <Card.Title>New Note</Card.Title>
+          <Form onSubmit={handleFormSubmit}>
             <InputForm
               type="text"
               name="title"
+              label="Title"
               value={formData.title}
               handleChange={inputChangeHandler}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
             <TextAreaForm
               name="description"
+              label="Description"
               value={formData.description}
               handleChange={inputChangeHandler}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="roles">Assigned To</label>
             <SelectOption
               name="user"
+              label="Assigned To"
               defaultValue=""
               options={users}
               handleChange={inputChangeHandler}
             />
-          </div>
-          <div className="form-group">
-            <button type="submit">
-              <FontAwesomeIcon icon={faSave} />
-              Create
-            </button>
-          </div>
-        </form>
+            <div className="form-group text-end my-3">
+              <Button type="submit" className="btn-sm rounded-0">
+                <FontAwesomeIcon icon={faSave} className="px-1" />
+                Create
+              </Button>
+            </div>
+          </Form>
+        </Card>
       ) : null}
-    </>
+    </Col>
   );
 }
 

@@ -53,7 +53,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
     }),
     deleteNote: builder.mutation({
       query: ({ id }) => ({
-        url: "/notes",
+        url: `/notes/${id}`,
         method: "DELETE",
         body: { id },
       }),

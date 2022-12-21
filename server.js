@@ -18,7 +18,7 @@ connectDB();
 // logger
 app.use(logger);
 // middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 // static page

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useUpdateUserMutation } from "./usersApiSlice";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,8 +7,10 @@ import { ROLES } from "../config/roles";
 import { InputForm, SelectOptions } from "../FormHelpers";
 
 function EditForm({ id, user }) {
-  const [updateUser, { isLoading, isSuccess, isError, error }] =
-    useUpdateUserMutation();
+  const [
+    updateUser,
+    { isLoading, isSuccess, isError, error },
+  ] = useUpdateUserMutation();
   const [formData, setFormData] = useState({
     id: id,
     email: user?.email,

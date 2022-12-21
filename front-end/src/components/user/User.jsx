@@ -1,27 +1,33 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-
+import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { selectUserById } from "./usersApiSlice";
+import { selectUserById, useDeleteUserMutation } from "./usersApiSlice";
 
 function User({ userId }) {
   const user = useSelector((state) => selectUserById(state, userId));
   const navigate = useNavigate();
+  const [deleteNote, { isLoading, isError, isSuccess, error }] =
+    useDeleteUserMutation();
+  const deleteHandler = () => deleteNote({ id: userId });
 
   if (user) {
-    const editHandle = () => navigate(`/dash/users/${userId}`);
+    const editHandler = () => navigate(`/dash/users/${userId}`);
     const userRoleString = user.roles.toString().replaceAll(",", ", ");
-    const cellStatus = user.active ? "" : "table__cell--inactive";
+
     return (
       <tr>
-        <td className={`table__cell ${cellStatus}`}>{user.username}</td>
-        <td className={`table__cell ${cellStatus}`}>{user.email}</td>
-        <td className={`table__cell ${cellStatus}`}>{userRoleString}</td>
-        <td className={`table__cell ${cellStatus}`}>
-          <button onClick={editHandle}>
+        <td>{user.username}</td>
+        <td>{user.email}</td>
+        <td>{userRoleString}</td>
+        <td>
+          <Button variant="primary btn-sm mx-1" onClick={editHandler}>
             <FontAwesomeIcon icon={faPenToSquare} />
-          </button>
+          </Button>
+          <Button variant="danger btn-sm mx-1" onClick={deleteHandler}>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </Button>
         </td>
       </tr>
     );

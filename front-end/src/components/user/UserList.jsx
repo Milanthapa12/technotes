@@ -1,8 +1,17 @@
-import { faHourglass1 } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Row, Col, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import User from "./User";
 import { useGetUsersQuery } from "./usersApiSlice";
+import { ModalContainer, MyTable } from "../FormHelpers";
+import ModalForm from "./ModalForm";
 
+const theads = ["Username", "Email", "Roles", "Action"];
 function UserList() {
+  const navigate = useNavigate();
+  const [modalShow, setModalShow] = useState(false);
   const { data, isLoading, isSuccess, isError, error } = useGetUsersQuery(
     undefined,
     {
@@ -15,28 +24,54 @@ function UserList() {
   let content;
   if (isLoading) content = <p>Loading...</p>;
   if (isError) {
+    console.log(error);
     content = (
       <p className={isError ? "errorCls" : ""}>{error?.data?.message}</p>
     );
-  }
-  const tableContent =
-    data?.ids?.length > 0
-      ? data?.ids.map((userId) => <User key={userId} userId={userId} />)
-      : null;
-  content = (
-    <table>
-      <thead>
+  } else {
+    const tableContent =
+      data?.ids?.length > 0 ? (
+        data?.ids.map((userId) => <User key={userId} userId={userId} />)
+      ) : (
         <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Roles</th>
-          <th>Action</th>
+          <td colSpan="6" className="text-center">
+            No users found !
+          </td>
         </tr>
-      </thead>
-      <tbody>{tableContent}</tbody>
-    </table>
+      );
+    content = <MyTable theads={theads} body={tableContent} />;
+  }
+
+  return (
+    <Col md={{ span: 8, offset: 2 }} className="vh-100">
+      <Row justify-content-md-center>
+        <div className="my-5">
+          <div className="w-100 text-end mb-2">
+            <Button variant="primary" onClick={() => setModalShow(true)}>
+              user
+            </Button>
+            <Button
+              variant="success btn-sm rounded-0"
+              title="Add User"
+              onClick={() => navigate("/dash/users/new")}
+            >
+              <FontAwesomeIcon icon={faUserGroup} />
+            </Button>
+          </div>
+          <div className="">{content}</div>
+        </div>
+      </Row>
+      <ModalContainer
+        show={modalShow}
+        onHide={() => setModalShow(!modalShow)}
+        id="user-create"
+        buttonText="Create"
+        btnCloseText="Cancel"
+        title="Create User"
+        body={<ModalForm setModalShow={setModalShow} />}
+      />
+    </Col>
   );
-  return content;
 }
 
 export default UserList;
